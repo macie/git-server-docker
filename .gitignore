@@ -1,0 +1,22 @@
+# Allowlist for Docker project
+
+# Ignore everything
+*
+
+# Allow CI configs
+!/.gitignore
+!/.github/**/*.yml
+
+# Allow source code...
+!Dockerfile
+!*.sh
+!*.yml
+
+!/git-shell-commands/*
+!/examples/*
+
+!*.md
+!LICENSE
+
+# ...also in subdirectories
+!*/
