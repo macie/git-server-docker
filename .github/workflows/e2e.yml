@@ -1,0 +1,27 @@
+name: E2E tests
+on:
+  pull_request:
+  push:
+    branches:
+    - e2e
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: E2E tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: sshpass
+
+      - name: Run E2E tests
+        run: make e2e

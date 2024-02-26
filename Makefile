@@ -15,6 +15,14 @@
 #
 
 LINT    = shellcheck
+TEST    = ./unittest
+
+
+#
+# INTERNAL MACROS
+#
+
+TEST_SRC=https://github.com/macie/unittest.sh/releases/latest/download/unittest
 
 
 #
@@ -22,7 +30,12 @@ LINT    = shellcheck
 #
 
 .PHONY: all
-all: check
+all: check e2e
+
+.PHONY: clean
+clean:
+	@echo '# Remove test runner' >&2
+	rm -f $(TEST) $(TEST).sha256sum
 
 .PHONY: info
 info:
@@ -30,6 +43,7 @@ info:
 	@uname -rsv;
 	@echo '# Development dependencies:'
 	@echo; $(LINT) -V || true
+	@echo; $(TEST) -v || true
 	@echo '# Environment variables:'
 	@env || true
 
@@ -37,6 +51,11 @@ info:
 check: $(LINT)
 	@echo '# Static analysis' >&2
 	$(LINT) *.sh ./git-shell-commands/*
+
+.PHONY: e2e
+e2e: $(TEST)
+	@echo '# E2E tests' >&2
+	@$(TEST)
 
 
 #
@@ -46,3 +65,11 @@ check: $(LINT)
 $(LINT):
 	@printf '# $@ installation path: ' >&2
 	@command -v $@ >&2 || { echo "ERROR: Cannot find $@" >&2; exit 1; }
+
+$(TEST):
+	@echo '# Prepare $@:' >&2
+	curl -fLO $(TEST_SRC)
+	curl -fLO $(TEST_SRC).sha256sum
+	sha256sum -c $@.sha256sum
+ 
+	chmod +x $@
