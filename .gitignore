@@ -6,6 +6,7 @@
 # Allow CI configs
 !/.gitignore
 !/.github/**/*.yml
+!Makefile
 
 # Allow source code...
 !Dockerfile
