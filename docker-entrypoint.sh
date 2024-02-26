@@ -6,9 +6,9 @@ if [ -n "${DEBUG-}" ]; then set -x; fi
 
 script_name="$0"
 
-msg() { echo >&2 -e "${script_name}:" "${1-}"; }
+msg() { printf "%s: %s\n" "${script_name}:" "${1-}" >&2; }
 warn() { msg "warning: ${1-}"; }
-die() {   msg "error: ${1-}"; exit "${2-1}"; }
+die() { msg "error: ${1-}"; exit "${2-1}"; }
 
 entrypoint_dir="/docker-entrypoint.d"
 
